@@ -82,14 +82,14 @@ class BaseModel(ABC):
         """Make models train mode during test time."""
         for name in self.network_names:
             if isinstance(name, str):
-                net = getattr(self, 'net' + name)
+                net = getattr(self, name)
                 net.train()
 
     def eval(self):
         """Make models eval mode during test time."""
         for name in self.network_names:
             if isinstance(name, str):
-                net = getattr(self, 'net' + name)
+                net = getattr(self, name)
                 net.eval()
 
     def test(self):
@@ -117,7 +117,7 @@ class BaseModel(ABC):
             if isinstance(name, str):
                 save_filename = '{0}_net_{1}.pth'.format(epoch, name)
                 save_path = os.path.join(self.save_dir, save_filename)
-                net = getattr(self, 'net' + name)
+                net = getattr(self, name)
 
                 if self.use_cuda:
                     torch.save(net.cpu().state_dict(), save_path)
@@ -133,7 +133,7 @@ class BaseModel(ABC):
             if isinstance(name, str):
                 load_filename = '{0}_net_{1}.pth'.format(epoch, name)
                 load_path = os.path.join(self.save_dir, load_filename)
-                net = getattr(self, 'net' + name)
+                net = getattr(self, name)
                 if isinstance(net, torch.nn.DataParallel):
                     net = net.module
                 print('loading the model from {0}'.format(load_path))
@@ -173,7 +173,7 @@ class BaseModel(ABC):
         print('Networks initialized')
         for name in self.network_names:
             if isinstance(name, str):
-                net = getattr(self, 'net' + name)
+                net = getattr(self, name)
                 num_params = 0
                 for param in net.parameters():
                     num_params += param.numel()
@@ -186,7 +186,7 @@ class BaseModel(ABC):
         """
         for name in self.network_names:
             if isinstance(name, str):
-                net = getattr(self, 'net' + name)
+                net = getattr(self, name)
                 for param in net.parameters():
                     param.requires_grad = requires_grad
 
@@ -221,7 +221,7 @@ class BaseModel(ABC):
         """
         for name in self.network_names:
             if isinstance(name, str):
-                net = getattr(self, 'net' + name)
+                net = getattr(self, name)
                 export_path = os.path.join(self.configuration['export_path'], 'exported_net_{}.pth'.format(name))
                 if isinstance(self.input, list): # we have to modify the input for tracing
                     self.input = [tuple(self.input)]

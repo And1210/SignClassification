@@ -54,7 +54,7 @@ def train(config_file, export=True):
             visualizer.reset()
 
             model.set_input(data)         # unpack data from dataset and apply preprocessing
-            # print(data)
+
             output = model.forward()
             # print('------------------------------------------------------------------------------')
             # print(output)

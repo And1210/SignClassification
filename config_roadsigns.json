@@ -1,0 +1,44 @@
+{
+    "train_dataset_params": {
+        "dataset_name": "Road_Signs",
+        "dataset_path": "/drive/datasets/Road_Sign_Kaggle",
+        "stage": "train",
+        "loader_params": {
+            "batch_size": 8,
+            "shuffle": true,
+            "num_workers": 1,
+            "pin_memory": true
+        },
+        "input_size": [200, 200]
+    },
+    "val_dataset_params": {
+        "dataset_name": "Road_Signs",
+        "dataset_path": "/drive/datasets/Road_Sign_Kaggle",
+        "stage": "val",
+        "loader_params": {
+            "batch_size": 1,
+            "shuffle": false,
+            "num_workers": 1,
+            "pin_memory": true
+        },
+        "input_size": [200, 200]
+    },
+    "model_params": {
+        "model_name": "RoadSigns",
+        "is_train": true,
+        "max_epochs": 50,
+        "lr": 0.0001,
+        "momentum": 0.9,
+        "weight_decay": 1e-4,
+        "export_path": "",
+        "checkpoint_path": "",
+        "load_checkpoint": -1,
+        "lr_policy": "step",
+        "lr_decay_iters": 10
+    },
+    "visualization_params": {
+        "name": "Road_Signs"
+    },
+    "printout_freq": 10,
+    "model_update_freq": 1
+}

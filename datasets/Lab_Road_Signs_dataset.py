@@ -7,20 +7,17 @@ from torchvision.transforms import transforms
 from torch.utils.data import Dataset
 from datasets.base_dataset import BaseDataset
 from utils.augmenters.augment import seg
+import xml.etree.ElementTree as ET
+from PIL import Image
+import matplotlib.pyplot as plt
 
-
-EMOTION_DICT = {
-    0: "angry",
-    1: "disgust",
-    2: "fear",
-    3: "happy",
-    4: "sad",
-    5: "surprise",
-    6: "neutral",
+SIGN_DICT = {
+    "other": 0,
+    "speedlimit": 1,
+    "stop": 2
 }
 
-
-class FER2013Dataset(BaseDataset):
+class LabRoadSignsDataset(BaseDataset):
     """
     Input params:
         stage: The stage of training.
@@ -33,10 +30,7 @@ class FER2013Dataset(BaseDataset):
 
         self._image_size = tuple(configuration["input_size"])
 
-        self._data = pd.read_csv(os.path.join(configuration["dataset_path"], "{}.csv".format(self._stage)))
-
-        self._pixels = self._data["pixels"].tolist()
-        self._emotions = pd.get_dummies(self._data["emotion"])
+        self.dataset_path = os.path.join(configuration["dataset_path"], "{}".format(self._stage))
 
         self._transform = transforms.Compose(
             [
@@ -47,31 +41,31 @@ class FER2013Dataset(BaseDataset):
 
 
     def __getitem__(self, index):
-        pixels = self._pixels[index]
-        pixels = list(map(int, pixels.split(" ")))
-        image = np.asarray(pixels).reshape(48, 48)
+        i = index
+        self._data = ET.parse(os.path.join(self.dataset_path, "annotations/sign_{}.xml".format(i)))
+        filename = self._data.findall('./filename')[0].text
+
+        pixels = Image.open(os.path.join(self.dataset_path, "images/{}".format(filename))).convert('RGBA')
+        image = np.asarray(pixels)#.reshape(48, 48)
         image = image.astype(np.uint8)
 
-        # print(self._image_size)
         image = cv2.resize(image, self._image_size)
 
         image = np.dstack([image] * 1)
         # image = np.dstack([image] * 3)
 
         # if self._stage == "train":
-        image = seg(image=image)
+        # image = seg(image=image)
 
-        # if self._stage == "test" and self._tta == True:
-        #     images = [seg(image=image) for i in range(self._tta_size)]
-        #     # images = [image for i in range(self._tta_size)]
-        #     images = list(map(self._transform, images))
-        #     target = self._emotions.iloc[idx].idxmax()
-        #     return images, target
+        label = self._data.findall('./name')[0].text
 
         image = self._transform(image)
-        target = self._emotions.iloc[index].idxmax()
+        target = SIGN_DICT[label]
         return image, target
 
     def __len__(self):
         # return the size of the dataset
-        return len(self._pixels)
+        return len(os.listdir(os.path.join(self.dataset_path, 'annotations')))
+
+    def get_label(self, label):
+        return list(SIGN_DICT.keys())[label]
