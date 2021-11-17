@@ -55,6 +55,9 @@ def train(config_file, export=True):
 
             model.set_input(data)         # unpack data from dataset and apply preprocessing
 
+            # print(data[0].shape)
+            # print(data[1])
+
             output = model.forward()
             # print('------------------------------------------------------------------------------')
             # print(output)

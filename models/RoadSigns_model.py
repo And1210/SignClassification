@@ -80,7 +80,7 @@ class BasicBlock(nn.Module):
 
 class RoadSign(nn.Module):
     """basenet for RoadSign"""
-    def __init__(self, in_channels=1, num_classes=3):
+    def __init__(self, in_channels=1, num_classes=12):
         super(RoadSign, self).__init__()
         norm_layer = nn.BatchNorm2d
 
@@ -118,7 +118,9 @@ class RoadSign(nn.Module):
             bias=False
         )
 
-        self.fc = nn.Linear(86528, num_classes)
+        self.fc = nn.Linear(25088, num_classes)
+        self.tanh = nn.Tanh()
+        self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -130,6 +132,7 @@ class RoadSign(nn.Module):
         x = self.conv2(x)
         x = self.bn2(x)
         x = self.relu(x)
+        x = self.res2(x)
         x = self.maxpool(x)
 
         x = self.conv3(x)
@@ -139,6 +142,7 @@ class RoadSign(nn.Module):
 
         x = torch.flatten(x, 1)
         x = self.fc(x)
+        x = self.tanh(x)
         return x
 
 class RoadSignsmodel(BaseModel):

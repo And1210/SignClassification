@@ -16,6 +16,33 @@ SIGN_DICT = {
     "speedlimit": 1,
     "stop": 2
 }
+# SIGN_DICT = {
+#     "speed_20": 0,
+#     "speed_30": 1,
+#     "speed_50": 2,
+#     "speed_60": 3,
+#     "speed_70": 4,
+#     "speed_80": 5,
+#     "speed_80_alt": 6,
+#     "speed_100": 7,
+#     "speed_120_alt": 8,
+#     "yield": 13,
+#     "stop": 14
+# }
+#
+# SIGN_DICT_MAP = {
+#     0: 0,
+#     1: 1,
+#     2: 2,
+#     3: 3,
+#     4: 4,
+#     5: 5,
+#     6: 6,
+#     7: 7,
+#     8: 8,
+#     13: 9,
+#     14: 10
+# }
 
 class LabRoadSignsDataset(BaseDataset):
     """
@@ -60,7 +87,10 @@ class LabRoadSignsDataset(BaseDataset):
         label = self._data.findall('./name')[0].text
 
         image = self._transform(image)
-        target = SIGN_DICT[label]
+        if (label == 'speedlimit'):
+            target = 0
+        else:
+            target = SIGN_DICT[label]
         return image, target
 
     def __len__(self):

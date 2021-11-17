@@ -6,6 +6,7 @@ seg = iaa.Sequential(
         iaa.Fliplr(p=0.5),
         # iaa.Affine(rotate=(-30, 30), deterministic=True),
         iaa.Affine(rotate=(-30, 30)),
+        iaa.PerspectiveTransform()
         # iaa.GaussianBlur(sigma=(0., 4.0), deterministic=True),
         # iaa.Dropout((0., 0.15), deterministic=True),
         # iaa.Add((-25, 25), deterministic=True),

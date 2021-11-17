@@ -35,6 +35,7 @@ def validate(config_file):
     for i, data in enumerate(val_dataset):
         model.set_input(data)  # unpack data from data loader
         model.test()           # run inference
+        print(model.val_predictions)
         # for i in range(len(data[0])):
             # print(val_dataset.dataset.get_label(int(data[1][i].cpu().detach().numpy())))
             # image = data[0][i].cpu().detach().numpy()
@@ -44,12 +45,14 @@ def validate(config_file):
             # plt.waitforbuttonpress(0)
             # plt.close()
         print(val_dataset.dataset.get_label(int(data[1][0].cpu().detach().numpy())))
+        # print(int(data[1][0].cpu().detach().numpy()))
         image = data[0][0].cpu().detach().numpy()
         image = np.transpose(image, (1, 2, 0))
         text = pytesseract.image_to_string(Image.fromarray(np.uint8(image*255)).convert('RGB'), lang="eng")
         print("IMAGE TEXT: {}".format(text))
         plt.imshow(image)
         plt.text(0, 0, val_dataset.dataset.get_label(np.argmax(model.val_predictions[-1].cpu())))
+        # plt.text(0, 0, np.argmax(model.val_predictions[-1].cpu()))
         plt.draw()
         plt.waitforbuttonpress(0)
         plt.close()

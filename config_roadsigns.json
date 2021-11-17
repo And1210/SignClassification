@@ -9,7 +9,7 @@
             "num_workers": 1,
             "pin_memory": true
         },
-        "input_size": [200, 200]
+        "input_size": [100, 100]
     },
     "val_dataset_params": {
         "dataset_name": "Road_Signs",
@@ -21,7 +21,7 @@
             "num_workers": 1,
             "pin_memory": true
         },
-        "input_size": [200, 200]
+        "input_size": [100, 100]
     },
     "model_params": {
         "model_name": "RoadSigns",
