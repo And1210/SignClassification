@@ -80,7 +80,7 @@ class BasicBlock(nn.Module):
 
 class RoadSign(nn.Module):
     """basenet for RoadSign"""
-    def __init__(self, in_channels=1, num_classes=12):
+    def __init__(self, in_channels=1, num_classes=47):
         super(RoadSign, self).__init__()
         norm_layer = nn.BatchNorm2d
 
@@ -148,7 +148,7 @@ class RoadSign(nn.Module):
 class RoadSignsmodel(BaseModel):
     """basenet for road sign detection"""
 
-    def __init__(self, configuration, in_channels=1, num_classes=3):
+    def __init__(self, configuration, in_channels=1, num_classes=47):
         super().__init__(configuration)
 
         self.model = RoadSign(in_channels, num_classes)

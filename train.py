@@ -50,7 +50,6 @@ def train(config_file, export=True):
         for i, data in enumerate(train_dataset):  # inner loop within one epoch
             # print(i)
             # print(data[0].shape)
-            # print(data[1])
             visualizer.reset()
 
             model.set_input(data)         # unpack data from dataset and apply preprocessing
